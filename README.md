@@ -11,7 +11,7 @@ This project implements a simple RESTful API for managing a library system. The 
 ## Getting Started
 
 1. Clone the repository:
-   git clone <repository_url>
+   git clone https://github.com/nikkivirtuoso/restful_API_LibraryBooks
    cd library-api
 
 Install dependencies:
@@ -56,5 +56,3 @@ Set the request type (GET, POST, PUT) and enter the corresponding URL.
 Provide the necessary request body (if applicable).
 Click "Send" to execute the request.
 
-
-Replace `<repository_url>` with the actual URL of your Git repository. Also, make sure to include a `LICENSE` file with the appropriate license information for your project.

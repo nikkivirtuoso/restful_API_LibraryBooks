@@ -5,6 +5,7 @@ import sqlite3
 app = Flask(__name__)
 api = Api(app)
 
+
 # Database initialization and connection within the Flask context
 def get_db():
     db = getattr(g, '_database', None)
@@ -25,14 +26,45 @@ def teardown_request(exception=None):
         g.db.commit()
         g.db.close()
 
+def create_table():
+    # Connect to the SQLite database (or create it if it doesn't exist)
+    connection = sqlite3.connect('library.db')
+    cursor = connection.cursor()
+
+    # Create the 'books' table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS books (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            author TEXT NOT NULL,
+            publication_year INTEGER
+        )
+    ''')
+
+    # Commit the changes and close the connection
+    connection.commit()
+    connection.close()
 # Helper function to seed the database with mock data
 def seed_database():
-    with app.app_context():
-        cursor = get_db().cursor()
-        cursor.execute("INSERT INTO books (title, author, publication_year) VALUES (?, ?, ?)", ('Book 1', 'Author 1', 2000))
-        cursor.execute("INSERT INTO books (title, author, publication_year) VALUES (?, ?, ?)", ('Book 2', 'Author 2', 2010))
-        cursor.execute("INSERT INTO books (title, author, publication_year) VALUES (?, ?, ?)", ('Book 3', 'Author 3', 2020))
-        get_db().commit()
+    # Connect to the SQLite database
+    connection = sqlite3.connect('library.db')
+    cursor = connection.cursor()
+
+    # Create the 'books' table if it doesn't exist
+    create_table()
+
+    # Insert data into the 'books' table
+    cursor.execute("INSERT INTO books (title, author, publication_year) VALUES (?, ?, ?)", ('Book 1', 'Author 1', 2000))
+
+    # Commit the changes and close the connection
+    connection.commit()
+    connection.close()
+
+# Call the function to create the 'books' table
+create_table()
+
+# Call the function to seed the database
+seed_database()
 
 # Endpoint 1: Retrieve All Books
 class AllBooks(Resource):
